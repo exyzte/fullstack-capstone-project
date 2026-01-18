@@ -1,5 +1,12 @@
+const express = require('express');
+const router = express.router();
+const connectToDatabase = require('../models/db');
+const logger = require('../logger');
+
 router.get('/', async (req, res) => {
+    logger.info('/ called');
     try {
+
         // Task 1: Connect to MongoDB and store connection to db constant
         const db = await connectToDatabase();
 
@@ -42,8 +49,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(gift);
     } catch (e) {
-        console.error('Error fetching gift:', e);
-        res.status(500).send('Error fetching gift');
+        next(e);
     }
 });
 
