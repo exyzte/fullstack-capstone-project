@@ -1,14 +1,13 @@
 router.get('/', async (req, res) => {
     try {
         // Task 1: Connect to MongoDB and store connection to db constant
-        // const db = {{insert code here}}
         const db = await connectToDatabase();
 
         // Task 2: use the collection() method to retrieve the gift collection
         const collection = db.collection('gifts');
 
         // Task 3: Fetch all gifts using the collection.find method. Chain with toArray method to convert to JSON array
-        // const gifts = {{insert code here}}
+        
         const gifts = await collection.find({}).toArray();
 
         // Task 4: return the gifts using the res.json method
@@ -57,7 +56,7 @@ router.post('/', async (req, res, next) => {
         const collection = db.collection("gifts");
         const gift = await collection.insertOne(req.body);
 
-        res.status(201).json(gift.ops[0]);
+        res.status(201).json({ _id: gift.insertedId, ...req.body });
     } catch (e) {
         next(e);
     }
