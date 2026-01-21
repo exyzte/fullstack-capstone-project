@@ -13,36 +13,77 @@ body {
 
 /* Task 2: Create a pseudo-element for the background and blur */
 body::before {
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: 'url("./static/home-background.jpg") no-repeat center center/cover';
+    background: 'url("./static/home-background.jpg") no-repeat center center';
+    background-size: cover;
+    z-index: -1;
     filter: blur(8px);
 }
 
 /* Task 3: Style the content area */
 .content {
     position: relative;
+    font-size: 600;
     z-index: 1;
     text-align: center;
-    color: #333;
-    max-width: 100%;
+    color: #1a1a1a;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff5f;
+    background-color: #ffffffa7;
+    border-radius: 10px;
 }
 
 /* Task 4: Add styles for headings, paragraphs, and buttons */
-h1, h2, .lead, .btn-primary {
-    margin-bottom: 20px;
+.lead {
+    margin-bottom: 2rem;
     color: #333;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    font-style: italic;
 }
 
-.lead {
-    font-size: 1.25rem;
-    margin-bottom: 30px;
-    font-style: italic;
+h1, h2 {
+    font-size: 4rem;
+    color: #333;
+    margin-bottom: 0.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary {
+    background-color: #3e8ed9;
+    border: none;
+    padding: 1rem 2.5rem;
+    color: #ffffff;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #6aa7dc;
+    transform: translateY(-3px);
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem;
+    }
+    h2 {
+        font-size: 2.5rem;
+    }
+    .lead {
+        font-size: 1.25rem;
+    }
 }
