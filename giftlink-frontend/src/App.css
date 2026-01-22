@@ -9,6 +9,12 @@ html {
   color: white; /* For text on primary color background */
 }
 
+body {
+  overflow: auto;
+  height: auto;
+  display: block;
+}
+
 /* Secondary color for hover states and highlights */
 .btn-primary:hover,
 .btn-primary:focus {
@@ -138,6 +144,7 @@ body,
 
 /* Change the background color of the navbar */
 .navbar {
+  padding-left: 15px;
   background-color: #f8f9fa; /* A light color for contrast with the text */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* A subtle shadow for depth */
 }
@@ -186,4 +193,9 @@ body,
   background-color: #c82333; /* A darker red on hover/focus for logout */
   color: white;
   text-decoration: none;
+}
+
+.collapse {
+  display: flex;
+  flex-direction: row;
 }
