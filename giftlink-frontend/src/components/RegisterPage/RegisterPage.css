@@ -1,6 +1,16 @@
 .register-card {
     background-color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.form-input {
+    border: 1px solid #ced4da;
+    padding: 0.5rem;
+    font-size: 1rem;
+    width: 90%;
+    margin: 2rem;
+
 }
 
 .register-card .form-label {
