@@ -7,10 +7,6 @@ import Navbar from './components/Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-
-
-
-
 function App() {
 
   return (
@@ -24,7 +20,7 @@ function App() {
           <Route path="/app/register" element={<RegisterPage />} />
           <Route path="/home" element={<MainPage />} />
         </Routes>
-        </>
+    </>
   );
 }
 
