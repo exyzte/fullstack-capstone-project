@@ -9,7 +9,23 @@ export default function RegisterPage() {
 
     async function handleRegister (e) {
         e.preventDefault();
-        // registration logic here
+        try {
+            const response = await fetch('http://localhost:5000/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    username,
+                    email,
+                    password,
+                }),
+            });
+        } catch (error) {
+            console.error('Error during registration:', error);
+        }
         
         console.log('Registering user:', { firstName, lastName, email });
 
@@ -18,32 +34,49 @@ export default function RegisterPage() {
     return (
         <div className="container mt-5">
             <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-4">
-                    <div className="card register-card">
-                        <h2 className="mb-4 text-center font-weight-bold">Register</h2>
+                <div className="col-md-6 col-lg-5">
+                    {/* Added 'p-4' for internal spacing and 'shadow' for depth */}
+                    <div className="card border-0 shadow-sm p-4"> 
+                        <h2 className="mb-4 text-center fw-bold">Register</h2>
                 
-                            <form className="form-group mb-3" onSubmit={handleRegister}>
-                                <label htmlFor="firstName" className="form-label">First Name</label>
+                        <form onSubmit={handleRegister}>
+                            {/* Wrap each pair in a mb-3 div for proper spacing */}
+                            <div className="mb-3">
+                                <label htmlFor="firstName" className="form-label fw-semibold">First Name</label>
                                 <input type="text" className="form-control" id="firstName" placeholder="Enter first name" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-                                <label htmlFor="lastName" className="form-label">Last Name</label>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="lastName" className="form-label fw-semibold">Last Name</label>
                                 <input type="text" className="form-control" id="lastName" placeholder="Enter last name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
-                                <label htmlFor="username" className="form-label">Username</label>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="username" className="form-label fw-semibold">Username</label>
                                 <input type="text" className="form-control" id="username" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                                <label htmlFor="email" className="form-label">Email</label>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="email" className="form-label fw-semibold">Email</label>
                                 <input type="email" className="form-control" id="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                <label htmlFor="password" className="form-label">Password</label>
+                            </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="password" className="form-label fw-semibold">Password</label>
                                 <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
-                            </form>
-                        <p className="text-center mt-4">
-                            Already a member? <a href="/app/login">Login here</a>
+                            </div>
+
+                            <button type="submit" className="btn btn-primary w-100 py-2 shadow-sm">
+                                Register
+                            </button>
+                        </form>
+
+                        <p className="text-center mt-4 mb-0">
+                            Already a member? <a href="/app/login" className="text-decoration-none">Login here</a>
                         </p>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     )
 }
