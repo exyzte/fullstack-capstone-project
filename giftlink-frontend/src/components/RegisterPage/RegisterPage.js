@@ -7,7 +7,8 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    async function handleRegister () {
+    async function handleRegister (e) {
+        e.preventDefault();
         // registration logic here
         
         console.log('Registering user:', { firstName, lastName, email });
@@ -24,18 +25,18 @@ export default function RegisterPage() {
                             <form className="form-group mb-3" onSubmit={handleRegister}>
                                 <label htmlFor="firstName" className="form-label">First Name</label>
                                 <input type="text" className="form-control" id="firstName" placeholder="Enter first name" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
-                                <label htmlFor="lastName">Last Name</label>
+                                <label htmlFor="lastName" className="form-label">Last Name</label>
                                 <input type="text" className="form-control" id="lastName" placeholder="Enter last name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                                 <label htmlFor="username" className="form-label">Username</label>
                                 <input type="text" className="form-control" id="username" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="email" className="form-label">Email</label>
                                 <input type="email" className="form-control" id="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                 <label htmlFor="password" className="form-label">Password</label>
                                 <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
                             </form>
-                        <button type="submit" className="btn btn-primary w-100 mb-3" onClick={handleRegister}>Register</button>
                         <p className="text-center mt-4">
-                            Already a member? <a href="/login">Login here</a>
+                            Already a member? <a href="/app/login">Login here</a>
                         </p>
                     </div>
 
