@@ -1,0 +1,32 @@
+import React, { useState } from 'react';
+
+export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    async function handleLogin() {
+        // login logic here
+        console.log('Logging in user with email:', email);
+    }
+    return (
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6 col-lg-4">
+                    <div className="login-card p-4 border rounded">
+                            <h2 className="mb-4 text-center font-weight-bold">Login</h2>
+                            <form className="form-group mb-3">
+                                <label htmlFor="email">Email</label>
+                                <input type="email" className="form-control" id="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <label htmlFor="password">Password</label>
+                                <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            </form>
+                            <button type="submit" className="btn btn-primary w-100 mb-3" onClick={handleLogin}>Login</button>
+                            <p className="text-center mt-4">
+                                Don't have an account? <a href="/register">Register here</a>
+                            </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
