@@ -14,16 +14,22 @@ function DetailsPage() {
         const authenticationToken = sessionStorage.getItem('auth-token');
         if (!authenticationToken) {
             navigate('/app/login');
-            return res.status(401).json({ message: 'Unauthorized'});
+            return;
         }
-
+        const controller = new AbortController();
         // get the gift to be rendered on the details page
         const fetchGift = async () => {
             try {
 				// Task 2: Fetch gift details
-                const response = await fetch(`${urlConfig.backendUrl}/api/gifts/${productId}`)
+                const url = `${urlConfig.backendUrl}/api/gifts/${productId}`;
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    headers: {
+                        'Authorization': `Bearer ${authenticationToken}`,
+                    }
+                });
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('Gift not found');
                 }
                 const data = await response.json();
                 setGift(data);
@@ -38,8 +44,10 @@ function DetailsPage() {
 
 		// Task 3: Scroll to top on component mount
 		window.scrollTo(0, 0);
+        return () => controller.abort();
+        
 
-    }, [productId]);
+    }, [productId, navigate]);
 
 
     const handleBackClick = () => {
@@ -74,7 +82,7 @@ function DetailsPage() {
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
-    if (!gift) return <div>Gift not found</div>;
+    if (!gift) return <div>Gift not found. <button className="btn btn-secondary" onClick={handleBackClick}>Back</button></div>;
 
 return (
         <div>

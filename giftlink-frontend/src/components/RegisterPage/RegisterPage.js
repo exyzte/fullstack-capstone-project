@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState('');
@@ -7,15 +8,15 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigate = useNavigate();
+
     async function handleRegister (e) {
         e.preventDefault();
         try {
             const response = await fetch('http://localhost:5000/api/users/register', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON. stringify({
                     firstName,
                     lastName,
                     username,
@@ -23,8 +24,17 @@ export default function RegisterPage() {
                     password,
                 }),
             });
+            const data = await response.json();
+            if (!response.ok) {
+                alert(data.message || 'Registration failed. Please try again');
+                throw new Error(data.message || 'Registration failed');
+            } else {
+                alert('Registration successful!');
+                navigate('app/login');
+            }
         } catch (error) {
             console.error('Error during registration:', error);
+            alert('Cannot connect to the server');
         }
         
         console.log('Registering user:', { firstName, lastName, email });
