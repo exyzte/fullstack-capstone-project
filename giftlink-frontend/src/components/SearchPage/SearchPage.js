@@ -104,6 +104,10 @@ function SearchPage() {
                         </div>
                     </div>
                     {/* Task 7: Add text input field for search criteria*/}
+                    <div className="input-group mb-3">
+                        <input className="form-control input-lg" type="text" placeholder="Search products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                        <button className="btn btn-primary" type="button" onClick={handleSearch}>Search</button>
+                    </div>
                     {/* Task 8: Implement search button with onClick event to trigger search:*/}
                     {/*Task 5: Display search results and handle empty results with a message. */}
                     <div className="search-results mt-4">
