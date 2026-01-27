@@ -23,6 +23,7 @@ function App() {
           <Route path="/home" element={<MainPage />} />
           <Route path="/product/:productId" element={<DetailsPage />} />
           <Route path="/app/search" element={<SearchPage />} />
+          <Route path="/app/search" element={<SearchPage />} />
         </Routes>
     </>
   );

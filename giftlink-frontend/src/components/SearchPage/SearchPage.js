@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {urlConfig} from '../../config';
+import './SearchPage.css'
 
 function SearchPage() {
 
@@ -10,7 +11,7 @@ function SearchPage() {
     const conditions = ['New', 'Like New', 'Older'];
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [ageRange, setAgeRange] = useState(6); //Init with minimum value
+    const [ageRange, setAgeRange] = useState(5); //Init with minimum value
     const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ function SearchPage() {
                     //something went wrong
                     throw new Error(`HTTP error; ${response.status}`)
                 }
+                console.log(response, 'Okay response')
                 const data = await response.json();
                 setSearchResults(data);
             } catch (error) {
@@ -37,6 +39,7 @@ function SearchPage() {
 
     // Task 2. Fetch search results from the API based on user inputs.
     const handleSearch = async () => {
+        debugger;
         const baseUrl = `${urlConfig.backendUrl}/api/search?`;
         const queryParams = new URLSearchParams({
             name: searchQuery,
@@ -46,6 +49,7 @@ function SearchPage() {
         }).toString();
 
         try {
+
             const response = await fetch(`${baseUrl}${queryParams}`);
             if (!response.ok) {
                 throw new Error(`Search failed`);
@@ -92,21 +96,21 @@ function SearchPage() {
                             </select>
                             {/* Task 4: Implement an age range slider and display the selected value. */}
                             <label htmlFor="ageRange">Less than {ageRange} years</label>
-                            <input
+                            <div className="age-range-cont"><input
                             type="range"
-                            className="form-control-range"
+                            className="form-control-range age-range-slider"
                             id="ageRange"
                             min="1"
                             max="10"
                             value={ageRange}
                             onChange={(e) => setAgeRange(e.target.value)}
-                            />
+                            /></div>
                         </div>
                     </div>
                     {/* Task 7: Add text input field for search criteria*/}
                     <div className="input-group mb-3">
                         <input className="form-control input-lg" type="text" placeholder="Search products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-                        <button className="btn btn-primary" type="button" onClick={handleSearch}>Search</button>
+                        <button className="btn btn-primary search-btn" type="button" onClick={handleSearch}>Search</button>
                     </div>
                     {/* Task 8: Implement search button with onClick event to trigger search:*/}
                     {/*Task 5: Display search results and handle empty results with a message. */}
@@ -114,7 +118,7 @@ function SearchPage() {
                         {searchResults.length > 0 ? (
                             searchResults.map((product) => (
                                 <div key={product.id} className="card mb-3">
-                                    <img src={product.image} alt={product.name} className={card-img-top} />
+                                    <img src={product.image} alt={product.name} className="card-img-top" />
                                     <div className="card-body">
                                         <h5 className="card-title">{product.name}</h5>
                                         <p className="card-text">{product.description.slice(0, 100)}...</p>
@@ -127,7 +131,7 @@ function SearchPage() {
                                 </div>
                             ))
                         ) : (
-                            <div className="alert alert-info" role="alert">
+                            <div className="alert alert-info no-found-card" role="alert">
                                 No products found. Please revise your filters.
                             </div>
                         )}
