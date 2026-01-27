@@ -7,7 +7,9 @@ export default function LoginPage() {
     async function handleLogin(e) {
         e.preventDefault();
         // login logic here
-        console.log('Logging in user with email:', email);
+        try {
+            
+        }
     }
     return (
         <div className="container mt-5">
@@ -24,7 +26,7 @@ export default function LoginPage() {
                                 <label htmlFor="password" className="form-label fw-semibold">Password</label>
                                 <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+                                <button onClick={handleLogin} className="btn btn-primary w-100 mb-3">Login</button>
                             </form>
                             <p className="text-center mt-4">
                                 Don't have an account? <a href="/app/register">Register here</a>

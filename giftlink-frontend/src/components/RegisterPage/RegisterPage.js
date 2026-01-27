@@ -34,7 +34,7 @@ export default function RegisterPage() {
             }
         } catch (error) {
             console.error('Error during registration:', error);
-            alert('Cannot connect to the server');
+            alert('Cannot connect to the server', error);
         }
         
         console.log('Registering user:', { firstName, lastName, email });
