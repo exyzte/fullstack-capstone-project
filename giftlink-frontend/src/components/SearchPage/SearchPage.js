@@ -49,7 +49,6 @@ function SearchPage() {
         }).toString();
 
         try {
-
             const response = await fetch(`${baseUrl}${queryParams}`);
             if (!response.ok) {
                 throw new Error(`Search failed`);
@@ -66,7 +65,7 @@ function SearchPage() {
 
     const goToDetailsPage = (productId) => {
         // Task 6. Enable navigation to the details page of a selected gift.
-        navigate(`app/product/${productId}`);
+        navigate(`/product/${productId}`);
     };
 
 
