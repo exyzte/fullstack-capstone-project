@@ -1,6 +1,11 @@
 .search-btn{
     flex: 0 0 30%;
-    
+    cursor: pointer;
+}
+
+.filter-section {
+    background-color: #ffffff;
+    color: black;
 }
 
 /* Task 3: Customize dropdown filters */
@@ -32,6 +37,7 @@
 .search-results:hover {
     box-shadow: none;
     transition: box-shadow 0.3s ease;
+    cursor: pointer;
 
 }
 
@@ -40,3 +46,6 @@
     padding: 1rem;
 }
 
+.no-found-card {
+    cursor: pointer;
+}

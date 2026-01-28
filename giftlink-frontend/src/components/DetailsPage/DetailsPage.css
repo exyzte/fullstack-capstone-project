@@ -1,7 +1,7 @@
 /* Style for image placeholder */
 .image-placeholder-large {
-    width: 600px;
-    height: 600px;
+    width: 700px;
+    height: 700px;
     position: relative;
     background-color: #f0f0f0;
 
@@ -51,6 +51,9 @@
     /* Task 6 styling */
     margin-top: 2rem;
     padding: 0.5rem;
+    width: 80%;
+    color: #00000018;
+
 }
 
 .comments-section .card {
@@ -66,3 +69,9 @@
     color: #555;
 }
 
+@media (max-width: 768px) {
+    .image-placeholder-large, .product-image-large, .no-image-available-large {
+        width: 530px;
+        height: auto;
+    }
+}

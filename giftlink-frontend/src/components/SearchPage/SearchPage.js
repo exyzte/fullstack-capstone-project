@@ -25,7 +25,7 @@ function SearchPage() {
                     //something went wrong
                     throw new Error(`HTTP error; ${response.status}`)
                 }
-                console.log(response, 'Okay response')
+                console.log(response, 'Okay response');
                 const data = await response.json();
                 setSearchResults(data);
             } catch (error) {

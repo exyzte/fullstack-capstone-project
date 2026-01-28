@@ -41,7 +41,7 @@ function MainPage() {
       };
 
     const getConditionClass = (condition) => {
-        return condition === "New" ? "list-group-item-success" : "list-group-item-warning";
+        return condition === "New" ? "list-group-item-success" : condition === "Like New" ? "list-group-item-warning" : condition === "Older" ? "list-group-item-danger" : "";
     };
 
     return (
@@ -69,7 +69,7 @@ function MainPage() {
                                 {/* // Write your code below this line */}
                                 <h5 className='card-title'>{gift.name}</h5> 
 
-                                <p className={`card-text ${getConditionClass(gift.condition)}`}>
+                                <p className={`list-group-item card-text ${getConditionClass(gift.condition)}`}>
                                 {gift.condition}
                                 </p>
 

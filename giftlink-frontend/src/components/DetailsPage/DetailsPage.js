@@ -51,7 +51,6 @@ function DetailsPage() {
 
 
     const handleBackClick = () => {
-		// Task 4: Handle back click
 		navigate(-1);
 	};
 
@@ -114,6 +113,18 @@ return (
                     	<p><strong>Description:</strong> 
 				        <a>{gift.description}</a>
                     	</p>
+                        <p><strong>Comments:</strong></p>
+                        <div className="comments-section mt-4">
+                        {gift.comments && gift.comments.length > 0 ? (
+                            gift.comments.map((comment, index) => (
+                                <div key={index} className="comment-box mb-2 p-2 border rounded">
+                                    <p className="mb-1"><strong>{comment.author}:</strong> {comment.text}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No comments available from db.</p>
+                        )}
+                        </div>
                 </div>
             </div>
             <div className="comments-section mt-4">
