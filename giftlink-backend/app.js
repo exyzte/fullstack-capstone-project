@@ -10,6 +10,7 @@ const {loadData} = require("./util/import-mongo/index");
 const searchRoutes = require('./routes/searchRoutes');
 const giftRoutes = require('./routes/giftRoutes');
 const pinoHttp = require('pino-http');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -31,7 +32,7 @@ app.use(pinoHttp({ logger: pinoLogger }));
 
 app.use('/api/gifts', giftRoutes);
 
-
+app.use('/api/auth', authRoutes);
 // Search API Task 2: add the searchRoutes to the server by using the app.use() method.
 app.use('/api/search', searchRoutes);
 
@@ -48,3 +49,5 @@ app.get("/",(req,res)=>{
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+
