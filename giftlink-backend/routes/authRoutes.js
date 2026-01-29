@@ -16,11 +16,12 @@ router.post('/register', async (req, res) => {
     try {
         const db = await connectToDatabase();
         const collection = db.collection('users');
-        const existingUser = await collection.find({ email: req.body.email }).toArray();
+        const { email, firstName, lastName, password } = req.body;
+        const existingUser = await collection.findOne({ email }).toArray();
         if (existingUser.length > 0) {
             return res.status(400).json({ error: 'User already exists' });
         }
-        const { email, firstName, lastName, password } = req.body;
+        
         const salt = await bcryptjs.genSalt(10);
         const hash = await bcryptjs.hash(password, salt);
         const newUser = await collection.insertOne({

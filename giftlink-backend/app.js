@@ -7,17 +7,11 @@ const pinoLogger = require('./logger');
 const connectToDatabase = require('./models/db');
 const {loadData} = require("./util/import-mongo/index");
 
-const searchRoutes = require('./routes/searchRoutes');
-const giftRoutes = require('./routes/giftRoutes');
-const pinoHttp = require('pino-http');
-const authRoutes = require('./routes/authRoutes');
-
 const app = express();
-
 app.use("*",cors());
 const port = 3060;
 
-// Connect to MongoDB; we just do this one time
+// Connect to MongoDB
 connectToDatabase().then(() => {
     pinoLogger.info('Connected to DB');
 })
@@ -26,15 +20,21 @@ connectToDatabase().then(() => {
 
 app.use(express.json());
 
+// Route files
+const giftRoutes = require('./routes/giftRoutes');
+const authRoutes = require('./routes/authRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const pinoHttp = require('pino-http');
+
+
 app.use(pinoHttp({ logger: pinoLogger }));
 
+
 // Use Routes
-
 app.use('/api/gifts', giftRoutes);
-
 app.use('/api/auth', authRoutes);
-// Search API Task 2: add the searchRoutes to the server by using the app.use() method.
 app.use('/api/search', searchRoutes);
+
 
 // Global Error Handler
 app.use((err, req, res, next) => {
