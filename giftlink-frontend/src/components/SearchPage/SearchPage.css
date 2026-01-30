@@ -1,7 +1,27 @@
-.search-btn{
-    flex: 0 0 30%;
-    cursor: pointer;
+.search-btn {
+    background-color: #0056B3;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #ffffff;
+    border: none;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    z-index: 10;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.3s ease
 }
+
+.search-btn:hover {
+    background-color: #009688;
+    transform: scale(1.05);
+}
+
+.input-group input { 
+    height: 3rem; 
+    font-size: 1rem; 
+    border-radius: 0.25rem 0 0 0.25rem; 
+}
+
+
 
 .filter-section {
     background-color: #ffffff;
