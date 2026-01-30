@@ -21,7 +21,7 @@ export default function LoginPage() {
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-5">
                     <div className="login-card p-3 border rounded">
-                            <h2 className="mb-4 text-center font-weight-bold">Login</h2>
+                            <h2 className="mb-4 text-center font-weight-bold login">Login</h2>
                             <form className="form-group mb-3 p-4" onSubmit={handleLogin}>
                                 <div className="mb-3">
                                 <label htmlFor="email" className="form-label fw-semibold">Email</label>

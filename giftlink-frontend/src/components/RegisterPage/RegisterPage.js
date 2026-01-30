@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { urlConfig } from '../../config';
 import { useAppContext } from '../../context/AuthContext';
+import './RegisterPage.css'
 
 function RegisterPage() {
     const [firstName, setFirstName] = useState('');
@@ -55,8 +56,8 @@ function RegisterPage() {
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-5">
                     {/* Added 'p-4' for internal spacing and 'shadow' for depth */}
-                    <div className="card border-0 shadow-sm p-4"> 
-                        <h2 className="mb-4 text-center fw-bold">Register</h2>
+                    <div className="register-card border rounded shadow-sm p-4"> 
+                        <h3 className="mb-4 text-center fw-bold register">Register</h3>
                 
                         <form onSubmit={handleRegister}>
                             {/* Wrap each pair in a mb-3 div for proper spacing */}
