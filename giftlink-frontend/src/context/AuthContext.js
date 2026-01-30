@@ -5,7 +5,7 @@ const AppContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
-  const [loading, setLoading]  = useState(false);
+  const [loading, setLoading]  = useState(true);
 
   useEffect(() => {
     const authenticationToken = sessionStorage.getItem('auth-token');

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useAppContext } from '../../context/AuthContext'; // Import the store
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
     const { isLoggedIn, userName, setIsLoggedIn } = useAppContext();
     const navigate = useNavigate();
     async function handleLogout() {
         sessionStorage.removeItem('auth-token');
+        sessionStorage.removeItem('firstName')
         setIsLoggedIn(false);
         navigate('/app');
     }
@@ -17,10 +17,8 @@ export default function Navbar() {
 
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
-                    {isLoggedIn ? (
-                        <li className="greeting-user">{`Hello, ${userName}`}</li>
-                    ) : (
-                        <div> </div>
+                    {isLoggedIn && (
+                        <li className="greeting-user navbar-text me-3">{`Hello, ${userName}`}</li>
                     )}
                     
                     {/* Task 1: Add links to Home and Gifts below*/}
@@ -34,7 +32,7 @@ export default function Navbar() {
                         {isLoggedIn ? (
                         <>
                             <li className="nav-item"><a className="nav-link" href="/app/search">Search</a></li>
-                            <li className='nav-item logout-btn'><a className="nav-link" onClick={handleLogout}>Logout</a></li>
+                            <li className='nav-item logout-btn'><a className="nav-link btn btn-link" onClick={handleLogout}>Logout</a></li>
                         </>
                         ) : (
                         <>

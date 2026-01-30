@@ -10,7 +10,6 @@ import Home from './components/Home/home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
-import { useAppContext } from './context/AuthContext';
 
 function App() {
 
