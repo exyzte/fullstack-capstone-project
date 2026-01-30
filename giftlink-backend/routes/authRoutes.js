@@ -45,4 +45,35 @@ router.post('/register', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    try {
+        db = await connectToDatabase();
+        collection = db.collection('users');
+        const { email, password } = req.body;
+        const match = await collection.findOne({ email: email });
+        if(match) {
+            let result = await bcryptjs.compare(password, match.password)
+            if(!result) {
+                logger.error('Passwords do not match');
+                return res.status(404).json({ error: 'Wrong password' });
+            } 
+            const userName = match.firstName;
+            const userEmail = match.email;
+            let payload = {
+                user: {
+                    match._id.toString(),
+                },
+            };
+            jwt.sign(user._id, JWT_SECRET);
+
+        } else {
+            logger.error('User not found');
+            return res.json({ error: 'User not found' });
+        }
+
+    } catch (error) {
+        
+    }
+})
+
 module.exports = router;

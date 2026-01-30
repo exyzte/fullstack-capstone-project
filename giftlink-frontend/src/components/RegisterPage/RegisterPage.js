@@ -17,7 +17,7 @@ function RegisterPage() {
 
 
     async function handleRegister (e) {
-        e.preventDefault();
+        e.preventDefault(); // prevents form submission behavior and page reload
         try {
             const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
                 method: 'POST',
