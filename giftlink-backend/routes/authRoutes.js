@@ -17,27 +17,28 @@ router.post('/register', async (req, res) => {
         const db = await connectToDatabase();
         const collection = db.collection('users');
         const { email, firstName, lastName, password } = req.body;
-        const existingUser = await collection.findOne({ email }).toArray();
-        if (existingUser.length > 0) {
+        const existingUser = await collection.findOne({ email })
+        if (existingUser) {
             return res.status(400).json({ error: 'User already exists' });
         }
         
         const salt = await bcryptjs.genSalt(10);
         const hash = await bcryptjs.hash(password, salt);
         const newUser = await collection.insertOne({
-            username: username,
+            firstName: firstName,
+            lastName: lastName,
             email: email,
             password: hash,
             createdAt: new Date(),
         })
         const payload = {
             user: {
-                id: user.insertedId,
+                id: newUser.insertedId,
             },
         };
         const authToken = jwt.sign(payload, JWT_SECRET);
         logger.info('User registered successfully');
-        res.json({authToken, email});
+        res.json({authToken, email, firstName});
     } catch (error) {
         logger.error(error.message);
         res.status(500).json({ error: 'Internal server error' });

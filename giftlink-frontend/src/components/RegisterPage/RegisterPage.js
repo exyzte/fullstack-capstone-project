@@ -1,36 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
 
-export default function RegisterPage() {
+function RegisterPage() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const navigate = useNavigate();
+    const { setIsLoggedIn, setUserName } = useAppContext();
+
 
     async function handleRegister (e) {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5000/api/register', {
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON. stringify({
+                body: JSON.stringify({
                     firstName,
                     lastName,
-                    username,
                     email,
                     password,
                 }),
             });
             const data = await response.json();
             if (!response.ok) {
-                alert(data.message || 'Registration failed. Please try again');
+                setErrorMessage(data.error);
                 throw new Error(data.message || 'Registration failed');
             } else {
                 alert('Registration successful!');
-                navigate('app/login');
+                sessionStorage.setItem('auth-token', data.authToken);
+                sessionStorage.setItem('firstName', data.firstName);
+                sessionStorage.setItem('email', data.email);
+                setIsLoggedIn(true);
+                setUserName(data.firstName);
+                navigate('/app');
             }
         } catch (error) {
             console.error('Error during registration:', error);
@@ -61,10 +70,6 @@ export default function RegisterPage() {
                                 <input type="text" className="form-control" id="lastName" placeholder="Enter last name" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                             </div>
 
-                            <div className="mb-3">
-                                <label htmlFor="username" className="form-label fw-semibold">Username</label>
-                                <input type="text" className="form-control" id="username" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                            </div>
 
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label fw-semibold">Email</label>
@@ -75,7 +80,7 @@ export default function RegisterPage() {
                                 <label htmlFor="password" className="form-label fw-semibold">Password</label>
                                 <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </div>
-
+                            {errorMessage && <div className="text-danger mb-3 text-center">{errorMessage}</div>}
                             <button type="submit" className="btn btn-primary w-100 py-2 shadow-sm">
                                 Register
                             </button>
@@ -91,4 +96,4 @@ export default function RegisterPage() {
     )
 }
 
-
+export default RegisterPage;

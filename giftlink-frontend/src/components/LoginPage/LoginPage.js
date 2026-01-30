@@ -8,6 +8,7 @@ export default function LoginPage() {
     async function handleLogin(e) {
         e.preventDefault();
         // login logic here
+        
         try {
 
         } catch(error) {
