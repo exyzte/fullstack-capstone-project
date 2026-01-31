@@ -5,12 +5,12 @@ import { useAppContext } from '../../context/AuthContext';
 import './RegisterPage.css'
 
 function RegisterPage() {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [ firstName, setFirstName ] = useState('');
+    const [ lastName, setLastName ] = useState('');
+    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ errorMessage, setErrorMessage ] = useState('');
 
     const navigate = useNavigate();
     const { setIsLoggedIn, setUserName } = useAppContext();
@@ -21,7 +21,9 @@ function RegisterPage() {
         try {
             const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', },
+                headers: { 
+                    'Content-Type': 'application/json',
+                 },
                 body: JSON.stringify({
                     firstName,
                     lastName,

@@ -1,15 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
+import { useNavigate,  } from 'react-router-dom';
 import './LoginPage.css';
 
-export default function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+function LoginPage() {
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ errorMessage, setErrorMessage ] = useState('');
+    const [ incorrectPassword, setIncorrectPassword ] = useState('');
+
+    const navigate = useNavigate();
+    const bearerToken = sessionStorage.getItem('bearer-token');
+    const { setIsLoggedIn, setUserName } = useAppContext();
+
+    useEffect(() => {
+        if(sessionStorage.getItem('auth-token')) {
+            navigate('/app');
+        };
+    }, [navigate]);
 
     async function handleLogin(e) {
         e.preventDefault();
-        // login logic here
+        
+        const navigate = useNavigate();
+        const { setIsLoggedIn, setUserName } = useAppContext();
         
         try {
+            const response = await fetch(`${urlConfig.backendUrl}/auth/login`, {
+                method: 'POST',
+                headers: { 
+                    'content-type': 'application/json',
+                    'Authorization': bearerToken ? `Bearer ${bearerToken}` : ','
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                }),
+            });
+            const data = await res.json();
+            sessionStorage
+
 
         } catch(error) {
             console.error('Error during login:', error);
@@ -29,7 +60,7 @@ export default function LoginPage() {
                                 </div>
                                 <div className="mb-3">
                                 <label htmlFor="password" className="form-label fw-semibold">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={setPassword(e.target.value)} />
                                 </div>
                                 <button onClick={handleLogin} className="btn btn-primary w-100 mb-3">Login</button>
                             </form>
