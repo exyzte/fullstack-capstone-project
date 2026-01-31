@@ -60,18 +60,20 @@ router.post('/login', async (req, res) => {
             const userEmail = match.email;
             let payload = {
                 user: {
-                    match._id.toString(),
+                    id: match._id.toString(),
                 },
             };
-            jwt.sign(user._id, JWT_SECRET);
-
+            authToken = jwt.sign(user._id, JWT_SECRET);
+            return res.status(200).json({ authToken, userName, userEmail });
         } else {
             logger.error('User not found');
-            return res.json({ error: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
     } catch (error) {
-        
+        logger.error(error);
+        return res.status(500).json({ error: 'Internal server error', details: error.message });
+
     }
 })
 
