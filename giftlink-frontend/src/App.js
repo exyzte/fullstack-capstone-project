@@ -19,7 +19,7 @@ function App() {
         <Routes>
           {/* the final code will not pass the products to every page, but each page will call the server API */}
           {/* Landing/home variants */}
-          
+          <Route path='/' element={<Home />} />
           <Route path="/app" element={<MainPage />} />
           <Route path="/home" element={<Home />} />
           {/* Auth routes */}

@@ -7,11 +7,12 @@ import './LoginPage.css';
 function LoginPage() {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
-    const [ errorMessage, setErrorMessage ] = useState('');
     const [ incorrectPassword, setIncorrectPassword ] = useState('');
     const navigate = useNavigate();
     const bearerToken = sessionStorage.getItem('bearer-token');
     const { setIsLoggedIn, setUserName } = useAppContext();
+    
+
 
     useEffect(() => {
         if(sessionStorage.getItem('auth-token')) {
@@ -19,17 +20,8 @@ function LoginPage() {
         };
     }, [navigate]);
 
-    useEffect(() => {
-        if(incorrectPassword) {
-            document.getElementById('').value = 'Incorrect password. Please try again'
-        }
-    }, [handleLogin]);
-
     async function handleLogin(e) {
         e.preventDefault();
-        
-        const navigate = useNavigate();
-        const { setIsLoggedIn, setUserName } = useAppContext();
         
         try {
             const response = await fetch(`${urlConfig.backendUrl}/auth/login`, {
@@ -43,26 +35,22 @@ function LoginPage() {
                     password
                 }),
             });
-            const data = await res.json();
+            const data = await response.json();
+            console.log(data);
             if(data.authToken) {
                 sessionStorage.setItem('auth-token', data.authToken);
                 sessionStorage.setItem('name', data.userName);
                 sessionStorage.setItem('email', data.email);
                 setIsLoggedIn(true);
-                navigate('/App');
+                navigate('/app');
             } else {
-                setErrorMessage('Password is incorrect. Please try again.');
+                setIncorrectPassword('Password is incorrect. Please try again.');
                 document.getElementById('email').value='';
                 document.getElementById('password').value='';
                 setTimeout(() => {
-                    setIncorrectPassword('Wrong password, please try again later.');
+                    setIncorrectPassword('');
                 }, 2000);
             }
-            
-
-
-
-
         } catch(error) {
             console.error('Error during login:', error);
             alert('Cannot connect to the server', error);
@@ -81,11 +69,11 @@ function LoginPage() {
                                 </div>
                                 <div className="mb-3">
                                 <label htmlFor="password" className="form-label fw-semibold">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={setPassword(e.target.value)} />
+                                <input type="password" className="form-control" id="password" placeholder="Enter password" value={password} onChange={(e) => {setPassword(e.target.value);setIncorrectPassword('')}} />
                                 </div>
                                 <button onClick={handleLogin} className="btn btn-primary w-100 mb-3">Login</button>
                             </form>
-                            <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{incorrect}</span>
+                            <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{setIncorrectPassword}</span>
                             <br></br>
                             <p className="text-center mt-4">
                                 Don't have an account?<br></br><br></br> <a href="/app/register">Register here</a>
@@ -97,4 +85,4 @@ function LoginPage() {
     )
 }
 
-export default LoginPage();
+export default LoginPage;
