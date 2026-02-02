@@ -30,7 +30,6 @@ function MainPage() {
     // Task 2: Navigate to details page
     const goToDetailsPage = (productId) => {
         navigate(`/product/${productId}`);
-
       };
 
     // Task 3: Format timestamp
