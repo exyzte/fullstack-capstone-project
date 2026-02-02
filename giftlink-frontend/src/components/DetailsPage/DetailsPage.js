@@ -34,9 +34,14 @@ function DetailsPage() {
                 const data = await response.json();
                 setGift(data);
             } catch (error) {
-                setError(error.message);
+                if(error.name === 'AbortError') {
+                    console.log('Fetch aborted')
+                } else {
+                    setError(error.message);
+                }
+                
             } finally {
-                setLoading(false);
+                if (!controller.signal.aborted) setLoading(false);
             }
         };
 
@@ -44,7 +49,7 @@ function DetailsPage() {
 
 		// Task 3: Scroll to top on component mount
 		window.scrollTo(0, 0);
-        return () => controller.abort();
+        return () => controller.abort
         
 
     }, [productId, navigate]);
@@ -105,7 +110,7 @@ return (
                     	<p><strong>Condition:</strong> 
                         <a>{gift.condition}</a>
                     	</p>
-                    	<p><strong>Date Added:</strong><a>{gift.dateAdded}</a>
+                    	<p><strong>Date Added:</strong><a>{gift.date_added}</a>
                         </p>
                     	<p><strong>Age (Years):</strong> 
 				        <a>{gift.age}</a>
