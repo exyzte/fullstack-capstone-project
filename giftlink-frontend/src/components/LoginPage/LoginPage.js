@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { urlConfig } from '../../config';
 import { useAppContext } from '../../context/AuthContext';
-import { useNavigate,  } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -9,7 +9,6 @@ function LoginPage() {
     const [ password, setPassword ] = useState('');
     const [ errorMessage, setErrorMessage ] = useState('');
     const [ incorrectPassword, setIncorrectPassword ] = useState('');
-
     const navigate = useNavigate();
     const bearerToken = sessionStorage.getItem('bearer-token');
     const { setIsLoggedIn, setUserName } = useAppContext();
@@ -19,6 +18,12 @@ function LoginPage() {
             navigate('/app');
         };
     }, [navigate]);
+
+    useEffect(() => {
+        if(incorrectPassword) {
+            document.getElementById('').value = 'Incorrect password. Please try again'
+        }
+    }, [handleLogin]);
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -39,7 +44,23 @@ function LoginPage() {
                 }),
             });
             const data = await res.json();
-            sessionStorage
+            if(data.authToken) {
+                sessionStorage.setItem('auth-token', data.authToken);
+                sessionStorage.setItem('name', data.userName);
+                sessionStorage.setItem('email', data.email);
+                setIsLoggedIn(true);
+                navigate('/App');
+            } else {
+                setErrorMessage('Password is incorrect. Please try again.');
+                document.getElementById('email').value='';
+                document.getElementById('password').value='';
+                setTimeout(() => {
+                    setIncorrectPassword('Wrong password, please try again later.');
+                }, 2000);
+            }
+            
+
+
 
 
         } catch(error) {
@@ -64,6 +85,7 @@ function LoginPage() {
                                 </div>
                                 <button onClick={handleLogin} className="btn btn-primary w-100 mb-3">Login</button>
                             </form>
+                            <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{incorrect}</span>
                             <br></br>
                             <p className="text-center mt-4">
                                 Don't have an account?<br></br><br></br> <a href="/app/register">Register here</a>
@@ -74,3 +96,5 @@ function LoginPage() {
         </div>
     )
 }
+
+export default LoginPage();
