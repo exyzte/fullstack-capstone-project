@@ -46,8 +46,9 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        db = await connectToDatabase();
-        collection = db.collection('users');
+        debugger;
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
         const { email, password } = req.body;
         const match = await collection.findOne({ email: email });
         if(match) {
@@ -63,8 +64,8 @@ router.post('/login', async (req, res) => {
                     id: match._id.toString(),
                 },
             };
-            authToken = jwt.sign(user._id, JWT_SECRET);
-            return res.status(200).json({ authToken, userName, userEmail });
+            const authToken = jwt.sign(payload, JWT_SECRET);
+            return res.status(200).json({ authToken, userName, email: userEmail });
         } else {
             logger.error('User not found');
             return res.status(404).json({ error: 'User not found' });
