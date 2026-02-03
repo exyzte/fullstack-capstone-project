@@ -39,9 +39,17 @@ function LoginPage() {
                 }),
             });
             const data = await response.json();
+            if(data.error === "User not found") {
+                setIncorrectPassword('User not found. Please register first or check the email.');
+                setEmail('');
+                setPassword('');
+                setTimeout(() => {
+                    setIncorrectPassword('');
+                }, 2000);
+                return;
+            }
             console.log(data);
             if(data.authToken) {
-                
                 sessionStorage.setItem('auth-token', data.authToken);
                 sessionStorage.setItem('name', data.userName);
                 sessionStorage.setItem('email', data.email);

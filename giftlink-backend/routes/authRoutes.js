@@ -111,7 +111,7 @@ router.put('/update', async (req, res) => {
             { $set: existingUser },
             { returnDocument: 'after' }
         );
-
+  
         const payload = {
             user: {
                 id: updateUser._id.toString(),
@@ -120,7 +120,7 @@ router.put('/update', async (req, res) => {
         const authToken = jwt.sign(payload, JWT_SECRET);
         res.json(authToken);
     } catch(error) {
-        return res.status(500).json({ error: 'Internal server erroor', error });
+        return res.status(500).json({ error: 'Internal server error', error });
     }
 });
 
