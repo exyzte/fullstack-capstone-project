@@ -4,6 +4,8 @@ import './Profile.css'
 import {urlConfig} from '../../config';
 import { useAppContext } from '../../context/AuthContext';
 
+// Pending to add firstName and lastName editing
+
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
  const [updatedDetails, setUpdatedDetails] = useState({});
@@ -108,7 +110,7 @@ return (
     type="email"
     name="email"
     value={userDetails.email}
-    disabled // Disable the email field
+    onChange={handleInputChange}
   />
 </label>
 <label>

@@ -56,7 +56,6 @@ function LoginPage() {
                 setIsLoggedIn(true);
                 navigate('/app');
             } else {
-                debugger;
                 setIncorrectPassword('Password is incorrect. Please try again.');
                 setEmail('');
                 setPassword('');
