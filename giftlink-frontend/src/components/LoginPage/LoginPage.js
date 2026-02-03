@@ -22,7 +22,7 @@ function LoginPage() {
 
     async function handleLogin(e) {
         e.preventDefault();
-        debugger;
+        
         try {
             const headers = { 
                 'content-type': 'application/json'
@@ -41,15 +41,17 @@ function LoginPage() {
             const data = await response.json();
             console.log(data);
             if(data.authToken) {
+                
                 sessionStorage.setItem('auth-token', data.authToken);
                 sessionStorage.setItem('name', data.userName);
                 sessionStorage.setItem('email', data.email);
                 setIsLoggedIn(true);
                 navigate('/app');
             } else {
+                debugger;
                 setIncorrectPassword('Password is incorrect. Please try again.');
-                document.getElementById('email').value='';
-                document.getElementById('password').value='';
+                setEmail('');
+                setPassword('');
                 setTimeout(() => {
                     setIncorrectPassword('');
                 }, 2000);
@@ -62,7 +64,7 @@ function LoginPage() {
     return (
         <div className="container mt-5">
             <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-5">
+                <div>
                     <div className="login-card p-3 border rounded">
                             <h2 className="mb-4 text-center font-weight-bold login">Login</h2>
                             <form className="form-group mb-3 p-4" onSubmit={handleLogin}>
@@ -76,7 +78,7 @@ function LoginPage() {
                                 </div>
                                 <button onClick={handleLogin} className="btn btn-primary w-100 mb-3">Login</button>
                             </form>
-                            <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{setIncorrectPassword}</span>
+                            <span style={{color:'red',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{incorrectPassword}</span>
                             <br></br>
                             <p className="text-center mt-4">
                                 Don't have an account?<br></br><br></br> <a href="/app/register">Register here</a>

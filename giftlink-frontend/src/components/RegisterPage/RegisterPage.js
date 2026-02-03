@@ -56,7 +56,7 @@ function RegisterPage() {
     return (
         <div className="container mt-5">
             <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-5">
+                <div>
                     {/* Added 'p-4' for internal spacing and 'shadow' for depth */}
                     <div className="register-card border rounded shadow-sm p-4"> 
                         <h3 className="mb-4 text-center fw-bold register">Register</h3>
