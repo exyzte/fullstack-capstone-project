@@ -79,6 +79,16 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/profile/:_id', async(req, res) => {
+    try {
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
+        const userId = req.params._id;
+        const objectId = require('mongodb').ObjectId;
+        
+    }
+})
+
 router.put('/update', async (req, res) => {
     
     const errors = validationResult(req);

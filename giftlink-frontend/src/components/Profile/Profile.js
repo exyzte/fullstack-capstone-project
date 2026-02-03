@@ -26,17 +26,20 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     try {
       const authToken = sessionStorage.getItem("auth-token");
-      const email = sessionStorage.getItem("email");
-      const name = sessionStorage.getItem('name');
-      if (name || authToken) {
-                const storedUserDetails = {
-                  name: name,
-                  email:email
-                };
-
-                setUserDetails(storedUserDetails);
-                setUpdatedDetails(storedUserDetails);
-              }
+      if (!authToken) {
+        navigate("/app/login");
+        return;
+      }
+      const response = await fetch(`${urlConfig.backendUrl}/api/auth/profile`, {
+        method: get,
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const profileData = await response.json();
+      }
 } catch (error) {
   console.error(error);
   // Handle error case
