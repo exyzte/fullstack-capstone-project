@@ -76,6 +76,51 @@ router.post('/login', async (req, res) => {
         return res.status(500).json({ error: 'Internal server error', details: error.message });
 
     }
-})
+});
+
+router.put('/update', async (req, res) => {
+    
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+            logger.error('Validation errors in update request', errors.array());
+            return res.status(400).json({ errors: errors.array() });
+        }
+    
+    try {
+        const email = req.headers.email;
+
+        if(!email) {
+            logger.error('Email not found in the request headers');
+            return res.status(400).json({ error: 'Email not found in the request headers' });
+        }
+
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
+        
+        const existingUser = await collection.findOne({ email });
+
+        existingUser.updatedAt = new Date();
+        existingUser.firstName = req.body.firstName;
+        existingUser.lastName = req.body.lastName;
+        existingUser.email = req.body.email;
+
+        const updateUser = await collection.findOneAndUpdate(
+            { email },
+            { $set: existingUser },
+            { returnDocument: 'after' }
+        );
+
+        const payload = {
+            user: {
+                id: updateUser._id.toString(),
+            },
+        };
+        const authToken = jwt.sign(payload, JWT_SECRET);
+        res.json(authToken);
+    } catch(error) {
+        return res.status(500).json({ error: 'Internal server erroor', error });
+    }
+});
 
 module.exports = router;

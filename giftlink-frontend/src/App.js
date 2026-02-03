@@ -28,6 +28,7 @@ function App() {
           {/* Search and details */}
           <Route path="/product/:productId" element={<DetailsPage />} />
           <Route path="/app/search" element={<SearchPage />} />
+          <Route path='/app/update' element={<Home />} />
         </Routes>
       </AuthProvider>
   );

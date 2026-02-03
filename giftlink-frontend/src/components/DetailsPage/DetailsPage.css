@@ -23,6 +23,13 @@
 
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Style for 'no image available' placeholder */
 .no-image-available-large {
     /* Task 3 styling */
@@ -58,6 +65,8 @@
 /* Style for comments section */
 .comments-section {
     /* Task 6 styling */
+    display: flex;
+    flex-direction: column;
     margin-top: 2rem;
     padding: 0.5rem;
     width: 80%;
@@ -70,6 +79,7 @@
 
 .comments-section .card {
     margin-bottom: 1rem;
+    width: 100%;
 }
 
 .comments-section .comment-author {
@@ -82,6 +92,10 @@
 }
 
 .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
 
 }
 

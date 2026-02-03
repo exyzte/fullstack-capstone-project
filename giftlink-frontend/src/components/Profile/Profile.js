@@ -13,8 +13,8 @@ const Profile = () => {
  const [editMode, setEditMode] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    const authtoken = sessionStorage.getItem("auth-token");
-    if (!authtoken) {
+    const authToken = sessionStorage.getItem("auth-token");
+    if (!authToken) {
       navigate("/app/login");
     } else {
       fetchUserProfile();
