@@ -7,6 +7,7 @@ import DetailsPage from './components/DetailsPage/DetailsPage';
 import Navbar from './components/Navbar/Navbar';
 import SearchPage from './components/SearchPage/SearchPage';
 import Home from './components/Home/home';
+import Profile from './components/Profile/Profile';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
@@ -28,6 +29,7 @@ function App() {
           {/* Search and details */}
           <Route path="/product/:productId" element={<DetailsPage />} />
           <Route path="/app/search" element={<SearchPage />} />
+          <Route path='/app/profile' element={<Profile />} />
           <Route path='/app/update' element={<Home />} />
         </Routes>
       </AuthProvider>
