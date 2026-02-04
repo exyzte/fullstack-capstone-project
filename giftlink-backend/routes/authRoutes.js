@@ -9,6 +9,7 @@ const pino = require('pino');
 const fetchUser = require('../middleware/fetchUser');
 const { ObjectId } = require('mongodb');
 
+
 const logger = pino();
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -48,7 +49,6 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        debugger;
         const db = await connectToDatabase();
         const collection = db.collection('users');
         const { email, password } = req.body;
@@ -99,55 +99,88 @@ router.get('/getUser', fetchUser, async(req, res) => {
 
 });
 
-router.put('/update', fetchUser, async (req, res) => {
+router.put('/update', [
+    fetchUser,
+    body('firstName', 'First name must be at least 2 characters').isLength({ min: 2 }).trim(),
+    body('lastName', 'Last name must be at least 2 characters').isLength({ min: 2 }).trim(),
+    body('email', 'Please provide a valid email').isEmail().normalizeEmail()
+], async (req, res) => {
     
+    // 1. Single validation check
     const errors = validationResult(req);
-
-    if(!errors.isEmpty()) {
-            logger.error('Validation errors in update request', errors.array());
-            return res.status(400).json({ errors: errors.array() });
-        }
+    if (!errors.isEmpty()) {
+        logger.error('Validation errors in update request', errors.array());
+        return res.status(400).json({ errors: errors.array() });
+    }
     
     try {
         const userId = req.user.id;
-
         const db = await connectToDatabase();
         const collection = db.collection('users');
-        
-        const existingUser = await collection.findOne({ _id: new ObjectId(userId) });
+
+        const existingEmail = await collection.findOne({ email: req.body.email, _id: { $ne: new ObjectId(userId) } });
+        if (existingEmail) {
+            logger.error('Email already in use by another account');
+            return res.status(400).json({ error: 'Email already in use by another account' });
+        }
 
         const updateData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
             updatedAt: new Date(),
-        }
-        
+        };
 
-        const updateUser = await collection.findOneAndUpdate(
+        // 
+
+        const result = await collection.findOneAndUpdate(
             { _id: new ObjectId(userId) },
             { $set: updateData },
             { returnDocument: 'after' }
         );
-  
+
+        // Accessing the updated document safely
+        const updatedUser = result.value || result; // Depends on driver version
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
         const payload = {
-            user: {
-                id: updateUser._id.toString(),
-            },
+            user: { id: updatedUser._id.toString() },
         };
+
         const authToken = jwt.sign(payload, JWT_SECRET);
+
         res.json({
             authToken,
-            firstName: updateUser.firstName,
-            email: updateUser.email
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName, // Good to include both
+            email: updatedUser.email
         });
-    } catch(error) {
-        return res.status(500).json({ error: 'Internal server error', error });
+        
+    } catch (error) {
+        logger.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-router.post('/changePassword', fetchUser, async (req, res) => {
+router.post('/changePassword', [
+    fetchUser,
+    // 1. Define the rules
+    body('currentPassword').notEmpty().withMessage('Current password is required'),
+    body('newPassword')
+        .isLength({ min: 8, max: 32 })
+        .withMessage('Password must be 8-32 characters')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/)
+        .withMessage('Password must include uppercase, lowercase, number, and special character')
+], async (req, res) => {
 
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        logger.error('Validation errors in changePassword request', errors.array());
+        return res.status(400).json({ errors: errors.array() });
+    }
     const userId = req.user.id;
     const { newPassword, currentPassword } = req.body;
     try {
