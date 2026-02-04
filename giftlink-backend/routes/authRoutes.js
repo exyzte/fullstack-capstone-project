@@ -6,6 +6,8 @@ const connectToDatabase = require('../models/db');
 const router = express.Router();
 const dotenv = require('dotenv');
 const pino = require('pino');
+const fetchUser = require('../middleware/fetchUser');
+const { ObjectId } = require('mongodb');
 
 const logger = pino();
 dotenv.config();
@@ -58,7 +60,7 @@ router.post('/login', async (req, res) => {
                 logger.error('Passwords do not match');
                 return res.status(404).json({ error: 'Wrong password' });
             } 
-            const userName = match.firstName;
+            const firstName = match.firstName;
             const userEmail = match.email;
             let payload = {
                 user: {
@@ -66,7 +68,7 @@ router.post('/login', async (req, res) => {
                 },
             };
             const authToken = jwt.sign(payload, JWT_SECRET);
-            return res.status(200).json({ authToken, userName, email: userEmail });
+            return res.status(200).json({ authToken, firstName, email: userEmail });
         } else {
             logger.error('User not found');
             return res.status(404).json({ error: 'User not found' });
@@ -79,17 +81,25 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/profile/:_id', async(req, res) => {
+router.get('/getUser', fetchUser, async(req, res) => {
     try {
         const db = await connectToDatabase();
         const collection = db.collection('users');
-        const userId = req.params._id;
-        const objectId = require('mongodb').ObjectId;
-        
+    
+        const user = await collection.findOne({ _id: new ObjectId(req.user.id) });
+        if(!user) {
+            logger.error('User not found for profile retrieval');
+            return res.status(404).json({ error: 'User not found' });
+        }
+        return res.status(200).json(user);
+    } catch (error) {
+        logger.error(error);
+        return res.status(500).json({ error: 'Internal server error' });
     }
+
 })
 
-router.put('/update', async (req, res) => {
+router.put('/update', fetchUser, async (req, res) => {
     
     const errors = validationResult(req);
 
@@ -99,26 +109,24 @@ router.put('/update', async (req, res) => {
         }
     
     try {
-        const email = req.headers.email;
-
-        if(!email) {
-            logger.error('Email not found in the request headers');
-            return res.status(400).json({ error: 'Email not found in the request headers' });
-        }
+        const userId = req.user.id;
 
         const db = await connectToDatabase();
         const collection = db.collection('users');
         
-        const existingUser = await collection.findOne({ email });
+        const existingUser = await collection.findOne({ _id: new ObjectId(userId) });
 
-        existingUser.updatedAt = new Date();
-        existingUser.firstName = req.body.firstName;
-        existingUser.lastName = req.body.lastName;
-        existingUser.email = req.body.email;
+        const updateData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            updatedAt: new Date(),
+        }
+        
 
         const updateUser = await collection.findOneAndUpdate(
-            { email },
-            { $set: existingUser },
+            { _id: new ObjectId(userId) },
+            { $set: updateData },
             { returnDocument: 'after' }
         );
   
@@ -128,7 +136,11 @@ router.put('/update', async (req, res) => {
             },
         };
         const authToken = jwt.sign(payload, JWT_SECRET);
-        res.json(authToken);
+        res.json({
+            authToken,
+            firstName: updateUser.firstName,
+            email: updateUser.email
+        });
     } catch(error) {
         return res.status(500).json({ error: 'Internal server error', error });
     }

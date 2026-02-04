@@ -9,7 +9,6 @@ function LoginPage() {
     const [ password, setPassword ] = useState('');
     const [ incorrectPassword, setIncorrectPassword ] = useState('');
     const navigate = useNavigate();
-    const bearerToken = sessionStorage.getItem('bearer-token');
     const { setIsLoggedIn, setUserName } = useAppContext();
     
 
@@ -27,9 +26,6 @@ function LoginPage() {
             const headers = { 
                 'content-type': 'application/json'
             };
-            if (bearerToken) {
-                headers['Authorization'] = `Bearer ${bearerToken}`;
-            }
             const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
                 method: 'POST',
                 headers,
@@ -51,9 +47,10 @@ function LoginPage() {
             console.log(data);
             if(data.authToken) {
                 sessionStorage.setItem('auth-token', data.authToken);
-                sessionStorage.setItem('name', data.userName);
+                sessionStorage.setItem('firstName', data.firstName);
                 sessionStorage.setItem('email', data.email);
                 setIsLoggedIn(true);
+                setUserName(data.firstName);
                 navigate('/app');
             } else {
                 setIncorrectPassword('Password is incorrect. Please try again.');

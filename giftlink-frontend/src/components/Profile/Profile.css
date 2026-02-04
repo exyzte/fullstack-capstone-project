@@ -63,3 +63,7 @@
     cursor: pointer;
   }
   
+  h1 {
+    color: #000;
+    font-size: 1rem;
+  }

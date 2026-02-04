@@ -7,12 +7,17 @@ import { useAppContext } from '../../context/AuthContext';
 // Pending to add firstName and lastName editing
 
 const Profile = () => {
-  const [userDetails, setUserDetails] = useState({});
+ const [userDetails, setUserDetails] = useState({});
  const [updatedDetails, setUpdatedDetails] = useState({});
- const {setUserName} = useAppContext();
+ const {firstName} = useAppContext();
  const [changed, setChanged] = useState("");
+ const [toggleNewPasswordVisibility, setToggleNewPasswordVisibility] = useState(false);
+ const [togglePasswordVisibility, setTogglePasswordVisibility] = useState(false);
+ const [newPassword, setNewPassword] = useState("");
+ const [toConfirm, setToConfirm] = useState("");
 
  const [editMode, setEditMode] = useState(false);
+ const [passwordChangeMode, setPasswordChangeMode] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const authToken = sessionStorage.getItem("auth-token");
@@ -30,8 +35,9 @@ const Profile = () => {
         navigate("/app/login");
         return;
       }
-      const response = await fetch(`${urlConfig.backendUrl}/api/auth/profile`, {
-        method: get,
+      
+      const response = await fetch(`${urlConfig.backendUrl}/api/auth/getUser`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json',
@@ -39,11 +45,20 @@ const Profile = () => {
       });
       if (response.ok) {
         const profileData = await response.json();
+        setUserDetails(profileData);
+        setUpdatedDetails(profileData);
+      } else {
+        throw new Error("Failed to fetch profile data");
       }
 } catch (error) {
   console.error(error);
   // Handle error case
 }
+};
+
+const handleChangePassword = async () => {
+  debugger;
+  console.log("Changing password");
 };
 
 const handleEdit = () => {
@@ -82,8 +97,8 @@ const handleSubmit = async (e) => {
 
     if (response.ok) {
       // Update the user details in session storage
-      setUserName(updatedDetails.name);
       sessionStorage.setItem('name', updatedDetails.name);
+      sessionStorage.setItem('email', updatedDetails.email);
       setUserDetails(updatedDetails);
       setEditMode(false);
       // Display success message to the user
@@ -95,7 +110,7 @@ const handleSubmit = async (e) => {
 
     } else {
       // Handle error case
-      throw new Error("Failed to update profile");
+      throw new Error("Failed to update profile with response status: " + response.status);
     }
   } catch (error) {
     console.error(error);
@@ -117,21 +132,51 @@ return (
   />
 </label>
 <label>
-   Name
+   First Name
    <input
      type="text"
      name="name"
-     value={updatedDetails.name}
+     value={updatedDetails.firstName}
      onChange={handleInputChange}
+     className="form-input"
    />
 </label>
+<label>
+    Last Name
+    <input
+      type="text"
+      name="lastName"
+      value={updatedDetails.lastName}
+      onChange={handleInputChange}
+      className="form-input"
+    />
+</label>
+<label>
+    <button onClick={setPasswordChangeMode}>Change Password</button>
+</label>
+    {passwordChangeMode ? (
+<div className="password-change-section">
+<h3>Change Password</h3>
+<label>
+  Current Password:
+  <input type={togglePasswordVisibility ? "text" : "password" } name="currentPassword" className="form-input" onChange={setToConfirm}/>
+  <input type="checkbox" onClick={setTogglePasswordVisibility}/> Show Password
+</label>
+<label>
+  New Password:
+  <input type={toggleNewPasswordVisibility ? "text" : "password" } name="newPassword" className="form-input" onChange={setNewPassword}/>
+  <input type="checkbox" onClick={setToggleNewPasswordVisibility}/> Show Password
+</label>
+<button onClick={handleChangePassword}>Change Password</button>
+</div>
+) : null}
 
 <button type="submit">Save</button>
 </form>
 ) : (
 <div className="profile-details">
-<h1>Hi, {userDetails.name}</h1>
-<p> <b>Email:</b> {userDetails.email}</p>
+<h1>Hi, {updatedDetails.firstName || ''}</h1>
+<p> <b>Email:</b> {updatedDetails.email || ''}</p>
 <button onClick={handleEdit}>Edit</button>
 <span style={{color:'green',height:'.5cm',display:'block',fontStyle:'italic',fontSize:'12px'}}>{changed}</span>
 </div>

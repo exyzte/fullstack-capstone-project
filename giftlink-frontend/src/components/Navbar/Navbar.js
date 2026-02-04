@@ -3,7 +3,7 @@ import { useAppContext } from '../../context/AuthContext'; // Import the store
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
-    const { isLoggedIn, userName, setIsLoggedIn } = useAppContext();
+    const { isLoggedIn, firstName, setIsLoggedIn } = useAppContext();
     const navigate = useNavigate();
     async function handleLogout() {
         sessionStorage.removeItem('auth-token');
@@ -18,7 +18,7 @@ export default function Navbar() {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
                     {isLoggedIn && (
-                        <li className="greeting-user navbar-text me-3 d-flex align-items-center">{`Hello, ${userName}`}</li>
+                        <li className="greeting-user navbar-text me-3 d-flex align-items-center">{`Hello, ${firstName}`}</li>
                     )}
                     
                     {/* Task 1: Add links to Home and Gifts below*/}
@@ -32,6 +32,7 @@ export default function Navbar() {
                         {isLoggedIn ? (
                         <>
                             <li className="nav-item"><Link className="nav-link" to="/app/search">Search</Link></li>
+                            <li className="nav-item"><Link className="nav-link" to="/app/profile">Profile</Link></li>
                             <li className='nav-item logout-btn'><button className="nav-link btn btn-link" onClick={handleLogout}>Logout</button></li>
                         </>
                         ) : (
