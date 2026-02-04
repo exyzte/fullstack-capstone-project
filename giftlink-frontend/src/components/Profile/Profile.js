@@ -129,6 +129,7 @@ return (
     name="email"
     value={userDetails.email}
     onChange={handleInputChange}
+    className={`form-input ${passwordChangeMode ? "grey" : ""}`}
   />
 </label>
 <label>
@@ -138,7 +139,8 @@ return (
      name="name"
      value={updatedDetails.firstName}
      onChange={handleInputChange}
-     className="form-input"
+     className={`form-input ${passwordChangeMode ? "grey" : ""}`}
+     disabled={passwordChangeMode}
    />
 </label>
 <label>
@@ -148,30 +150,36 @@ return (
       name="lastName"
       value={updatedDetails.lastName}
       onChange={handleInputChange}
-      className="form-input"
+      className={`form-input ${passwordChangeMode ? "grey" : ""}`}
     />
 </label>
+{passwordChangeMode ? null : (
 <label>
-    <button onClick={setPasswordChangeMode}>Change Password</button>
+    <button onClick={() => setPasswordChangeMode(!passwordChangeMode)}>Change Password</button>
 </label>
+)}
     {passwordChangeMode ? (
 <div className="password-change-section">
 <h3>Change Password</h3>
 <label>
   Current Password:
-  <input type={togglePasswordVisibility ? "text" : "password" } name="currentPassword" className="form-input" onChange={setToConfirm}/>
-  <input type="checkbox" onClick={setTogglePasswordVisibility}/> Show Password
+  <input type={togglePasswordVisibility ? "text" : "password" } name="currentPassword" className="form-input textInput" onChange={(e) => setToConfirm(e.target.value)}/><br></br>
 </label>
+  <input type="checkbox" onClick={() =>setTogglePasswordVisibility(!togglePasswordVisibility)}/> Show Password
+
 <label>
   New Password:
-  <input type={toggleNewPasswordVisibility ? "text" : "password" } name="newPassword" className="form-input" onChange={setNewPassword}/>
-  <input type="checkbox" onClick={setToggleNewPasswordVisibility}/> Show Password
+  <input type={toggleNewPasswordVisibility ? "text" : "password" } name="newPassword" className="form-input textInput" onChange={(e) => setNewPassword(e.target.value)}/><br></br>
 </label>
-<button onClick={handleChangePassword}>Change Password</button>
+  <input type="checkbox" onClick={() => setToggleNewPasswordVisibility(!toggleNewPasswordVisibility)}/> Show Password
+<br></br>
+<button onClick={handleChangePassword}>Change Password</button><br></br>
+<button onClick={() => setPasswordChangeMode(false)}>Cancel</button>
 </div>
 ) : null}
-
+{passwordChangeMode ? null : (
 <button type="submit">Save</button>
+  )}
 </form>
 ) : (
 <div className="profile-details">
