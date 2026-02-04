@@ -136,7 +136,7 @@ return (
    First Name
    <input
      type="text"
-     name="name"
+     name="firstName"
      value={updatedDetails.firstName}
      onChange={handleInputChange}
      className={`form-input ${passwordChangeMode ? "grey" : ""}`}
