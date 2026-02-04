@@ -9,7 +9,6 @@ import { useAppContext } from '../../context/AuthContext';
 const Profile = () => {
  const [userDetails, setUserDetails] = useState({});
  const [updatedDetails, setUpdatedDetails] = useState({});
- const {firstName} = useAppContext();
  const [changed, setChanged] = useState("");
  const [toggleNewPasswordVisibility, setToggleNewPasswordVisibility] = useState(false);
  const [togglePasswordVisibility, setTogglePasswordVisibility] = useState(false);
@@ -57,9 +56,50 @@ const Profile = () => {
 };
 
 const handleChangePassword = async () => {
-  debugger;
+  
+  if(toConfirm === "" || newPassword === "") {
+    alert("Please fill both fields");
+    return;
+  }
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,32}$/;
+
+  if(!regex.test(newPassword)) {
+    alert("Password must be 8-32 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    return;
+  }
+  try {
+    const authToken = sessionStorage.getItem('auth-token');
+    const email = sessionStorage.getItem('email');
+    const payload = {
+      currentPassword: toConfirm,
+      newPassword: newPassword
+    };
+    const response = await fetch(`${urlConfig.backendUrl}/api/auth/changePassword`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ ...payload, email })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert('Password changed successfully');
+        setPasswordChangeMode(false);
+        setEditMode(false);
+        
+
+      } else {
+        throw new Error(data.error || 'Failed to change password');
+      }
+  } catch (error) {
+    console.error(error);
+    alert('Error changing password: ' + error.message);
+  }
   console.log("Changing password");
 };
+ 
 
 const handleEdit = () => {
 setEditMode(true);
@@ -121,7 +161,7 @@ const handleSubmit = async (e) => {
 return (
 <div className="profile-container">
   {editMode ? (
-<form onSubmit={handleSubmit}>
+<div className="edit-profile-form">
 <label>
   Email
   <input
@@ -173,14 +213,14 @@ return (
 </label>
   <input type="checkbox" onClick={() => setToggleNewPasswordVisibility(!toggleNewPasswordVisibility)}/> Show Password
 <br></br>
-<button onClick={handleChangePassword}>Change Password</button><br></br>
+<button onClick={() => handleChangePassword()}>Change Password</button><br></br>
 <button onClick={() => setPasswordChangeMode(false)}>Cancel</button>
 </div>
 ) : null}
 {passwordChangeMode ? null : (
-<button type="submit">Save</button>
+<button onClick={handleSubmit}>Save</button>
   )}
-</form>
+</div>
 ) : (
 <div className="profile-details">
 <h1>Hi, {updatedDetails.firstName || ''}</h1>
