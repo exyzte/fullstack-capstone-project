@@ -147,12 +147,13 @@ router.put('/update', fetchUser, async (req, res) => {
 });
 
 router.post('/changePassword', fetchUser, async (req, res) => {
+
     const userId = req.user.id;
     const { newPassword, currentPassword } = req.body;
     try {
         const db = await connectToDatabase();
         const collection = db.collection('users');
-        const user = collection.findOne({ _id: new ObjectId(userId) });
+        const user = await collection.findOne({ _id: new ObjectId(userId) });
         if(!user) {
             logger.error('User not found for password change');
             return res.status(400).json({ error: 'User not found' });

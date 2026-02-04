@@ -68,6 +68,7 @@ const handleChangePassword = async () => {
     return;
   }
   try {
+    debugger;
     const authToken = sessionStorage.getItem('auth-token');
     const email = sessionStorage.getItem('email');
     const payload = {
@@ -79,7 +80,7 @@ const handleChangePassword = async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'auth-token': `Bearer ${authToken}`
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({ ...payload, email })
       });
@@ -88,7 +89,7 @@ const handleChangePassword = async () => {
         alert('Password changed successfully');
         setPasswordChangeMode(false);
         setEditMode(false);
-        
+
 
       } else {
         throw new Error(data.error || 'Failed to change password');

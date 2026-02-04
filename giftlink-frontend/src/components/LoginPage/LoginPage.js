@@ -24,7 +24,8 @@ function LoginPage() {
         
         try {
             const headers = { 
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('auth-token')}`
             };
             const response = await fetch(`${urlConfig.backendUrl}/api/auth/login`, {
                 method: 'POST',
