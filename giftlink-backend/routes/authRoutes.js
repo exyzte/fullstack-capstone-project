@@ -103,7 +103,7 @@ router.put('/update', [
     fetchUser,
     body('firstName', 'First name must be at least 2 characters').isLength({ min: 2 }).trim(),
     body('lastName', 'Last name must be at least 2 characters').isLength({ min: 2 }).trim(),
-    body('email', 'Please provide a valid email').isEmail().normalizeEmail()
+    body('email', 'Please provide a valid email address').isEmail().normalizeEmail()
 ], async (req, res) => {
     
     // 1. Single validation check
@@ -114,11 +114,18 @@ router.put('/update', [
     }
     
     try {
+        
+        const email = req.headers.email;
+
+        if (!email) {
+            logger.error('Email header is missing in update request');
+            return res.status(400).json({ error: 'Email header is required' });
+        }
         const userId = req.user.id;
         const db = await connectToDatabase();
         const collection = db.collection('users');
 
-        const existingEmail = await collection.findOne({ email: req.body.email, _id: { $ne: new ObjectId(userId) } });
+        const existingEmail = await collection.findOne({ email: email, _id: { $ne: new ObjectId(userId) } });
         if (existingEmail) {
             logger.error('Email already in use by another account');
             return res.status(400).json({ error: 'Email already in use by another account' });
