@@ -21,15 +21,7 @@ const Profile = () => {
  const [passwordChangeMode, setPasswordChangeMode] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    const authToken = sessionStorage.getItem("auth-token");
-    if (!authToken) {
-      navigate("/app/login");
-    } else {
-      fetchUserProfile();
-    }
-  }, [navigate]);
-
-  const fetchUserProfile = async () => {
+      const fetchUserProfile = async () => {
     try {
       const authToken = sessionStorage.getItem("auth-token");
       if (!authToken) {
@@ -56,6 +48,15 @@ const Profile = () => {
   // Handle error case
 }
 };
+    const authToken = sessionStorage.getItem("auth-token");
+    if (!authToken) {
+      navigate("/app/login");
+    } else {
+      fetchUserProfile();
+    }
+  }, [navigate]);
+
+
 
 const handleChangePassword = async () => {
   

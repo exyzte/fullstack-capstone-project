@@ -106,17 +106,17 @@ return (
                         )}
                     </div>
                     	<p><strong>Category:</strong>
-                        <a>{gift.category}</a></p>
+                        <span>{gift.category}</span></p>
                     	<p><strong>Condition:</strong> 
-                        <a>{gift.condition}</a>
+                        <span>{gift.condition}</span>
                     	</p>
-                    	<p><strong>Date Added:</strong><a>{gift.date_added}</a>
+                    	<p><strong>Date Added:</strong><span>{gift.date_added}</span>
                         </p>
                     	<p><strong>Age (Years):</strong> 
-				        <a>{gift.age}</a>
+				        <span>{gift.age}</span>
                     	</p>
                     	<p><strong>Description:</strong> 
-				        <a>{gift.description}</a>
+				        <span>{gift.description}</span>
                     	</p>
                         <p><strong>Comments:</strong></p>
                         <div className="comments-section mt-4">
