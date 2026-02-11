@@ -177,7 +177,7 @@ return (
   <input
     type="email"
     name="email"
-    value={userDetails.email}
+    value={updatedDetails.email}
     onChange={handleInputChange}
     className={`form-input ${passwordChangeMode ? "grey" : ""}`}
   />
