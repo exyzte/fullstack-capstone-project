@@ -45,7 +45,6 @@ function LoginPage() {
                 }, 2000);
                 return;
             }
-            console.log(data);
             if(data.authToken) {
                 sessionStorage.setItem('auth-token', data.authToken);
                 sessionStorage.setItem('firstName', data.firstName);

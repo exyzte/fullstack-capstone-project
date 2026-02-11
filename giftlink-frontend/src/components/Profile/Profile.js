@@ -15,6 +15,8 @@ const Profile = () => {
  const [newPassword, setNewPassword] = useState("");
  const [toConfirm, setToConfirm] = useState("");
 
+ const { setUserName } = useAppContext();
+
  const [editMode, setEditMode] = useState(false);
  const [passwordChangeMode, setPasswordChangeMode] = useState(false);
   const navigate = useNavigate();
@@ -89,9 +91,13 @@ const handleChangePassword = async () => {
         alert('Password changed successfully');
         setPasswordChangeMode(false);
         setEditMode(false);
-
-
+        setNewPassword('');
+        setToConfirm('');
       } else {
+        if (data.errors) {
+          const errorMsg = data.errors.map(err => err.msg).join("\n");
+          throw new Error(errorMsg);
+        }
         throw new Error(data.error || 'Failed to change password');
       }
   } catch (error) {
@@ -130,7 +136,7 @@ const handleSubmit = async (e) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'auth-token': `Bearer ${authToken}`,
+        'Authorization': `Bearer ${authToken}`,
         'email': email,
       },
       body: JSON.stringify(payload)
@@ -140,17 +146,19 @@ const handleSubmit = async (e) => {
       // Update the user details in session storage
       sessionStorage.setItem('name', updatedDetails.name);
       sessionStorage.setItem('email', updatedDetails.email);
+      setUserName(updatedDetails.firstName);
       setUserDetails(updatedDetails);
       setEditMode(false);
       // Display success message to the user
-      setChanged("Name Changed Successfully!");
+      setChanged("Updated Successfully!");
       setTimeout(() => {
         setChanged("");
-        navigate("/");
+        navigate("/app");
       }, 1000);
 
     } else {
       // Handle error case
+      alert("Failed to update profile. Please try again." + response.status);
       throw new Error("Failed to update profile with response status: " + response.status);
     }
   } catch (error) {
